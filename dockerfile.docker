@@ -1,0 +1,17 @@
+FROM apache/airflow:latest-python3.11
+EXPOSE 8080
+
+ARG AIRFLOW_HOME
+
+ENV AIRFLOW_HOME=$AIRFLOW_HOME
+ENV AIRFLOW_CONFIG=${AIRFLOW_HOME}/airflow.cfg
+ENV AIRFLOW__CORE_SQL_ALCHEMY_CONN=sqlite:////${AIRFLOW_HOME}/airflow.db
+ENV AIRFLOW__CORE__LOAD_EXAMPLES=False
+
+WORKDIR $AIRFLOW_HOME
+
+COPY . ${AIRFLOW_HOME}/Project_airflow_ecommerce/
+COPY ./dags ./dags
+COPY ./airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+
+CMD ["airflow", "standalone"]
